@@ -1,23 +1,42 @@
 /*
 =============================================================
-Database Creation and Table Setup Script (MySQL Version)
+Create Database and Schemas
 =============================================================
 Script Purpose:
-    This script creates a new MySQL database named 'MyDatabase'. 
-    If the database already exists, it is dropped to ensure a clean setup. 
-    The script then creates two tables: 'customers' and 'orders'
-    with their respective schemas, and populates them with sample data.
-    
+    This script creates a new database named 'DataWarehouse' after checking if it already exists. 
+    If the database exists, it is dropped and recreated. Additionally, the script sets up three schemas 
+    within the database: 'bronze', 'silver', and 'gold'.
+	
 WARNING:
-    Running this script will drop the entire 'MyDatabase' database if it exists, 
-    permanently deleting all data within it. Proceed with caution and ensure you 
-    have proper backups before executing this script.
+    Running this script will drop the entire 'DataWarehouse' database if it exists. 
+    All data in the database will be permanently deleted. Proceed with caution 
+    and ensure you have proper backups before running this script.
 */
-/* Creation of the database DataWarehouse*/
 
-create database DataWarehouse;
-use DataWarehouse;
-/*Creation of the schemas like Bronze, Silver and Gold*/
-create schema Bronze;
-create schema silver;
-create schema gold;
+USE master;
+GO
+
+-- Drop and recreate the 'DataWarehouse' database
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'DataWarehouse')
+BEGIN
+    ALTER DATABASE DataWarehouse SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DataWarehouse;
+END;
+GO
+
+-- Create the 'DataWarehouse' database
+CREATE DATABASE DataWarehouse;
+GO
+
+USE DataWarehouse;
+GO
+
+-- Create Schemas
+CREATE SCHEMA bronze;
+GO
+
+CREATE SCHEMA silver;
+GO
+
+CREATE SCHEMA gold;
+GO
